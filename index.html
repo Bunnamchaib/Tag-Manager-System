@@ -60,9 +60,9 @@
             <i class="fa-solid fa-tags text-blue-600"></i> TAG MANAGER SYSTEM
         </h1>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
+            <div class="md:col-span-2 bg-white rounded-xl shadow-lg p-6 w-full overflow-hidden">
                 
                 <div class="flex flex-col md:flex-row justify-between gap-4 mb-4">
                     <div class="relative w-full md:w-2/3">
@@ -118,13 +118,20 @@
 
             </div>
 
-            <div class="lg:col-span-1 bg-white rounded-xl shadow-lg p-6 sticky top-6 self-start">
+            <div class="md:col-span-1 bg-white rounded-xl shadow-lg p-6 sticky top-6 self-start w-full">
                 <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-desktop text-gray-600"></i> Preview
                 </h2>
                 
                 <div class="mb-4 bg-blue-50 p-4 rounded-lg border border-blue-100">
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">ตั้งค่าวันที่พิมพ์</label>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-sm font-semibold text-gray-700">ตั้งค่าวันที่พิมพ์</label>
+                        <!-- เพิ่ม Checkbox ไม่แสดงวันที่ ตรงนี้ -->
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="noDateCheck" class="w-4 h-4 cursor-pointer text-blue-600" onchange="updatePreviewUI()">
+                            <label for="noDateCheck" class="text-sm cursor-pointer text-gray-700 font-medium">ไม่แสดงวันที่</label>
+                        </div>
+                    </div>
                     <input type="date" id="printDate" class="w-full border-gray-300 rounded-md shadow-sm p-2" onchange="updatePreviewUI()">
                 </div>
 
@@ -157,13 +164,13 @@
         let currentPage = 1;
         let itemsPerPage = 15;
 
-       // =========================================================
-        // โค้ดอัปเกรด: ดึงข้อมูลจาก Cache ให้โหลดไว 0.1 วินาที + แอบอัปเดตเบื้องหลัง
+        // =========================================================
+        // อัปเดต: ระบบ Caching โหลดไว 0.1 วิ และอัปเดตเบื้องหลัง
         // =========================================================
         window.onload = async () => {
             document.getElementById('printDate').valueAsDate = new Date();
             
-            // 1. ลองดึงข้อมูลเก่าที่เคยเซฟไว้ในเครื่อง (Local Storage) มาโชว์ก่อนเลย (ไวมาก 0.1 วิ)
+            // 1. ดึงข้อมูลจาก Cache ในเครื่องก่อน
             const cachedData = localStorage.getItem('tagManagerDB');
             if (cachedData) {
                 allData = JSON.parse(cachedData);
@@ -172,7 +179,7 @@
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('dataTable').style.display = 'table';
                 document.getElementById('pagination').style.display = 'flex';
-                renderTable(); // วาดตารางทันทีไม่ต้องรอโหลด
+                renderTable(); 
             }
 
             // 2. แอบไปวิ่งดึงข้อมูลใหม่จาก Google Sheets เบื้องหลัง
@@ -181,28 +188,23 @@
                 if (!response.ok) throw new Error("Network error");
                 const freshData = await response.json();
                 
-                // 3. เอาข้อมูลใหม่มาเทียบกับของเก่าในเครื่องว่ามีอะไรเปลี่ยนไหม?
+                // 3. เทียบข้อมูล ถ้ามีอัปเดตให้เซฟและแสดงผลใหม่เนียนๆ
                 if (JSON.stringify(freshData) !== JSON.stringify(allData)) {
-                    // ถ้าข้อมูลไม่เหมือนเดิม (เช่น มีคนพิมพ์เพิ่มใน Sheet) ให้ทำการอัปเดต
                     allData = freshData;
                     
-                    // เช็คว่าผู้ใช้กำลังพิมพ์ค้นหาอะไรค้างไว้ไหม จะได้อัปเดตตารางให้เนียนๆ ไม่ขัดจังหวะ
                     const query = document.getElementById('searchInput').value.trim();
                     if (query !== "") {
-                        handleSearch(); // ถ้าค้นหาอยู่ ให้ใช้ระบบค้นหาเดิม
+                        handleSearch(); 
                     } else {
                         filteredData = [...allData];
-                        renderTable(); // ถ้าไม่ได้ค้นหา ให้วาดตารางใหม่
+                        renderTable(); 
                     }
                     
-                    // เซฟข้อมูลใหม่สุดลงเครื่อง
                     localStorage.setItem('tagManagerDB', JSON.stringify(freshData));
-                    
-                    // (ออปชันเสริม) แจ้งเตือนเล็กๆ ใน Console ให้โปรแกรมเมอร์รู้ว่าอัปเดตแล้ว
                     console.log("อัปเดตข้อมูลล่าสุดจากฐานข้อมูลเรียบร้อยแล้ว");
                 }
                 
-                // กรณีเปิดเว็บเป็นครั้งแรกสุดในชีวิต (ยังไม่มี Cache ในเครื่อง)
+                // กรณีเปิดเว็บครั้งแรกสุด ยังไม่มี Cache
                 if (!cachedData) {
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('dataTable').style.display = 'table';
@@ -211,11 +213,10 @@
                 }
 
             } catch (error) {
-                // ถ้าเน็ตหลุด หรือ Google Sheets ล่ม
                 if (!cachedData) {
-                    document.getElementById('loading').innerHTML = `<div class="text-red-500 font-bold">เกิดข้อผิดพลาดในการโหลดข้อมูล (เช็คอินเทอร์เน็ต)</div>`;
+                    document.getElementById('loading').innerHTML = `<div class="text-red-500 font-bold">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>`;
                 }
-                console.log("ทำงานในโหมด Offline: ดึงข้อมูลจาก Cache อย่างเดียว");
+                console.log("ทำงานโหมด Offline หรือเชื่อมต่อไม่สำเร็จ");
             }
         };
 
@@ -314,14 +315,12 @@
             if (!url) return null;
             const match = url.match(/[-\w]{25,}/);
             if (match) {
-                // คืนค่าเฉพาะ ID ของรูป เพื่อนำไปเข้ากระบวนการดึงรูปแบบใหม่
                 return match[0];
             }
             return url; 
         }
 
         function buildTagHTML(item, dateStr) {
-            // ค้นหาคอลัมน์รูปอัตโนมัติ (เผื่อชื่อคอลัมน์ใน Sheet พิมพ์ไม่ตรงเป๊ะ)
             let rawImageLink = item['Photo base64'] || item['Image URL'] || item['Photo'];
             if (!rawImageLink) {
                 for (let key in item) {
@@ -336,18 +335,14 @@
             let imageTag = '<span class="text-gray-300 text-xs font-bold">ไม่มีรูปภาพ</span>';
             
             if (fileIdOrUrl && fileIdOrUrl.length > 5) {
-                // ตรวจสอบว่าเป็น ID ของ Google Drive หรือไม่ (ไม่มี / และยาว 25 ตัวขึ้นไป)
                 if (!fileIdOrUrl.includes('/') && fileIdOrUrl.length >= 25) {
-                    // สร้าง URL สองแบบไว้สลับกันหากเกิดการบล็อกจากบราวเซอร์
                     const url1 = `https://drive.google.com/uc?export=view&id=${fileIdOrUrl}`;
                     const url2 = `https://lh3.googleusercontent.com/d/${fileIdOrUrl}`;
                     
-                    // หากรูปแรกโหลดไม่สำเร็จ (onerror) โค้ดจะสลับไปดึงรูปที่สองให้ทันที
                     imageTag = `<img src="${url1}" alt="Part Photo" 
                                      onload="this.style.display='block'" 
                                      onerror="if(!this.dataset.retried){ this.dataset.retried='true'; this.src='${url2}'; } else { this.outerHTML='<span class=\\'text-red-500 text-[10px] font-bold text-center\\'>โหลดรูปไม่ได้<br>(ลืมเปิดแชร์ลิงก์เป็นสาธารณะ?)</span>'; }">`;
                 } else {
-                    // หากเป็น URL ธรรมดาที่ไม่ใช่ Google Drive
                     imageTag = `<img src="${fileIdOrUrl}" alt="Part Photo" 
                                      onload="this.style.display='block'" 
                                      onerror="this.outerHTML='<span class=\\'text-red-500 text-[10px] font-bold text-center\\'>ลิงก์ไม่ถูกต้อง</span>'">`;
@@ -397,7 +392,13 @@
         // =========================================================
         // การทำงานของปุ่มต่างๆ
         // =========================================================
+        
+        // อัปเดต: ดึงวันที่โดยเช็คจาก Checkbox ด้วย
         function getFormattedDate() {
+            // ถัาติ๊ก Checkbox "ไม่แสดงวันที่" จะคืนค่าความว่างเปล่า ("") ไปให้ Tag เลย
+            const noDate = document.getElementById('noDateCheck').checked;
+            if (noDate) return "";
+
             const dateInput = document.getElementById('printDate').value;
             if(!dateInput) return "";
             const d = new Date(dateInput);
@@ -423,8 +424,9 @@
             `;
         }
 
+        // อัปเดต: ปุ่มแก้ไข เปิดหน้า Form แท็บใหม่
         function requestEdit(partNo) {
-            alert(`บันทึกคำขอแก้ไขข้อมูล Part No: ${partNo} เรียบร้อยแล้ว`);
+            window.open('https://forms.gle/sTVniBmxLPWSYE8S6', '_blank');
         }
 
         function downloadTag(encodedItem) {
@@ -445,7 +447,6 @@
             const printArea = document.getElementById('print-area');
             printArea.innerHTML = ''; 
             
-            // สร้าง 10 Copies เตรียมพิมพ์
             for(let i = 0; i < 10; i++) {
                 const tagWrapper = document.createElement('div');
                 tagWrapper.innerHTML = buildTagHTML(selectedItem, dateStr);
@@ -453,7 +454,6 @@
                 printArea.appendChild(tagWrapper);
             }
 
-            // หน่วงเวลาเล็กน้อยให้ภาพจาก Google Drive โหลดเสร็จก่อนสั่งพิมพ์
             setTimeout(() => {
                 window.print();
             }, 500);
