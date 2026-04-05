@@ -157,22 +157,65 @@
         let currentPage = 1;
         let itemsPerPage = 15;
 
+       // =========================================================
+        // โค้ดอัปเกรด: ดึงข้อมูลจาก Cache ให้โหลดไว 0.1 วินาที + แอบอัปเดตเบื้องหลัง
+        // =========================================================
         window.onload = async () => {
             document.getElementById('printDate').valueAsDate = new Date();
             
-            try {
-                const response = await fetch(SCRIPT_URL);
-                if (!response.ok) throw new Error("Network error");
-                allData = await response.json();
+            // 1. ลองดึงข้อมูลเก่าที่เคยเซฟไว้ในเครื่อง (Local Storage) มาโชว์ก่อนเลย (ไวมาก 0.1 วิ)
+            const cachedData = localStorage.getItem('tagManagerDB');
+            if (cachedData) {
+                allData = JSON.parse(cachedData);
                 filteredData = [...allData];
                 
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('dataTable').style.display = 'table';
                 document.getElementById('pagination').style.display = 'flex';
+                renderTable(); // วาดตารางทันทีไม่ต้องรอโหลด
+            }
+
+            // 2. แอบไปวิ่งดึงข้อมูลใหม่จาก Google Sheets เบื้องหลัง
+            try {
+                const response = await fetch(SCRIPT_URL);
+                if (!response.ok) throw new Error("Network error");
+                const freshData = await response.json();
                 
-                renderTable();
+                // 3. เอาข้อมูลใหม่มาเทียบกับของเก่าในเครื่องว่ามีอะไรเปลี่ยนไหม?
+                if (JSON.stringify(freshData) !== JSON.stringify(allData)) {
+                    // ถ้าข้อมูลไม่เหมือนเดิม (เช่น มีคนพิมพ์เพิ่มใน Sheet) ให้ทำการอัปเดต
+                    allData = freshData;
+                    
+                    // เช็คว่าผู้ใช้กำลังพิมพ์ค้นหาอะไรค้างไว้ไหม จะได้อัปเดตตารางให้เนียนๆ ไม่ขัดจังหวะ
+                    const query = document.getElementById('searchInput').value.trim();
+                    if (query !== "") {
+                        handleSearch(); // ถ้าค้นหาอยู่ ให้ใช้ระบบค้นหาเดิม
+                    } else {
+                        filteredData = [...allData];
+                        renderTable(); // ถ้าไม่ได้ค้นหา ให้วาดตารางใหม่
+                    }
+                    
+                    // เซฟข้อมูลใหม่สุดลงเครื่อง
+                    localStorage.setItem('tagManagerDB', JSON.stringify(freshData));
+                    
+                    // (ออปชันเสริม) แจ้งเตือนเล็กๆ ใน Console ให้โปรแกรมเมอร์รู้ว่าอัปเดตแล้ว
+                    console.log("อัปเดตข้อมูลล่าสุดจากฐานข้อมูลเรียบร้อยแล้ว");
+                }
+                
+                // กรณีเปิดเว็บเป็นครั้งแรกสุดในชีวิต (ยังไม่มี Cache ในเครื่อง)
+                if (!cachedData) {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('dataTable').style.display = 'table';
+                    document.getElementById('pagination').style.display = 'flex';
+                    localStorage.setItem('tagManagerDB', JSON.stringify(freshData));
+                }
+
             } catch (error) {
-                document.getElementById('loading').innerHTML = `<div class="text-red-500 font-bold">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>`;
+                // ถ้าเน็ตหลุด หรือ Google Sheets ล่ม
+                if (!cachedData) {
+                    document.getElementById('loading').innerHTML = `<div class="text-red-500 font-bold">เกิดข้อผิดพลาดในการโหลดข้อมูล (เช็คอินเทอร์เน็ต)</div>`;
+                }
+                console.log("ทำงานในโหมด Offline: ดึงข้อมูลจาก Cache อย่างเดียว");
             }
         };
 
