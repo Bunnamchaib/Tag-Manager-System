@@ -349,29 +349,35 @@
                 }
             }
 
+            // ฟังก์ชันซ่อนค่า หากค่าเป็น 0, '0', null, undefined หรือว่างเปล่า ให้คืนค่าว่างไปเลย
+            const clearZero = (val) => {
+                if (val === 0 || val === '0' || val === null || val === undefined || val === '') return '';
+                return val;
+            };
+
             return `
                 <table class="tag-box bg-white">
                     <tr>
                         <td class="font-bold w-[25%] uppercase bg-gray-100">Customer</td>
-                        <td class="text-center font-bold text-lg uppercase" colspan="3">${item['Customer'] || ''}</td>
+                        <td class="text-center font-bold text-lg uppercase" colspan="3">${clearZero(item['Customer'])}</td>
                     </tr>
                     <tr>
                         <td class="font-bold uppercase bg-gray-100">Model</td>
-                        <td class="text-center font-bold uppercase w-[35%]">${item['Model'] || ''}</td>
+                        <td class="text-center font-bold uppercase w-[35%]">${clearZero(item['Model'])}</td>
                         <td class="font-bold text-center w-[15%] uppercase bg-gray-100">Date</td>
                         <td class="text-center font-bold w-[25%]">${dateStr}</td>
                     </tr>
                     <tr>
                         <td class="font-bold text-xs uppercase bg-gray-100">Part Name</td>
-                        <td class="text-center font-bold text-sm uppercase" colspan="3">${item['Part name'] || ''}</td>
+                        <td class="text-center font-bold text-sm uppercase" colspan="3">${clearZero(item['Part name'])}</td>
                     </tr>
                     <tr>
                         <td class="font-bold text-xs uppercase bg-gray-100">Part Number</td>
-                        <td class="text-center font-bold text-sm uppercase" colspan="3">${item['Part no'] || ''}</td>
+                        <td class="text-center font-bold text-sm uppercase" colspan="3">${clearZero(item['Part no'])}</td>
                     </tr>
                     <tr>
                         <td class="font-bold uppercase bg-gray-100">Quantity</td>
-                        <td class="text-center"><span class="font-bold text-xl">${item['Qty pcs'] || '0'}</span> Pcs.</td>
+                        <td class="text-center"><span class="font-bold text-xl">${clearZero(item['Qty pcs'])}</span> Pcs.</td>
                         <td class="text-center align-middle p-0" colspan="2" rowspan="2">
                             <div class="tag-img-container">${imageTag}</div>
                         </td>
@@ -393,9 +399,7 @@
         // การทำงานของปุ่มต่างๆ
         // =========================================================
         
-        // อัปเดต: ดึงวันที่โดยเช็คจาก Checkbox ด้วย
         function getFormattedDate() {
-            // ถัาติ๊ก Checkbox "ไม่แสดงวันที่" จะคืนค่าความว่างเปล่า ("") ไปให้ Tag เลย
             const noDate = document.getElementById('noDateCheck').checked;
             if (noDate) return "";
 
@@ -424,7 +428,6 @@
             `;
         }
 
-        // อัปเดต: ปุ่มแก้ไข เปิดหน้า Form แท็บใหม่
         function requestEdit(partNo) {
             window.open('https://forms.gle/sTVniBmxLPWSYE8S6', '_blank');
         }
