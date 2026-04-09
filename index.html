@@ -14,7 +14,7 @@
         /* การจัดรูปแบบตาราง Tag */
         .tag-box {
             width: 100%; height: 100%; border: 2px solid #000;
-            border-collapse: collapse; background: #fff;
+            border-collapse: collapse; background: #fff; table-layout: fixed;
         }
         .tag-box td { border: 1px solid #000; padding: 4px 8px; font-size: 11px; vertical-align: middle; }
         .tag-box .font-bold { font-weight: 700; }
@@ -153,7 +153,7 @@
     <script>
         // =========================================================
         // 🔴 ใส่ URL Google Apps Script ที่นี่
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqCKW-BQhoqusizjbi40-QeNq8mogyh4ynT7O6WqQtSUa7TSOpUP95OKGKUCty0S6Udw/exec"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdknCuAju4ppjrWvxGizYAH0vwicX9Ww4mrV8z_og9t8qTipmnfZOPeHeMR6E1iYDMYQ/exec"; 
         // =========================================================
         
         let allData = [];
@@ -333,39 +333,97 @@
 
             const fileIdOrUrl = extractDriveImageId(rawImageLink);
             let imageTag = '<span class="text-gray-300 text-xs font-bold">ไม่มีรูปภาพ</span>';
-            
+
             if (fileIdOrUrl && fileIdOrUrl.length > 5) {
                 if (!fileIdOrUrl.includes('/') && fileIdOrUrl.length >= 25) {
                     const url1 = `https://drive.google.com/uc?export=view&id=${fileIdOrUrl}`;
                     const url2 = `https://lh3.googleusercontent.com/d/${fileIdOrUrl}`;
-                    
+
                     imageTag = `<img src="${url1}" alt="Part Photo" 
                                      onload="this.style.display='block'" 
-                                     onerror="if(!this.dataset.retried){ this.dataset.retried='true'; this.src='${url2}'; } else { this.outerHTML='<span class=\\'text-red-500 text-[10px] font-bold text-center\\'>โหลดรูปไม่ได้<br>(ลืมเปิดแชร์ลิงก์เป็นสาธารณะ?)</span>'; }">`;
+                                     onerror="if(!this.dataset.retried){ this.dataset.retried='true'; this.src='${url2}'; } else { this.outerHTML='<span class=\'text-red-500 text-[10px] font-bold text-center\'>โหลดรูปไม่ได้<br>(ลืมเปิดแชร์ลิงก์เป็นสาธารณะ?)</span>'; }">`;
                 } else {
                     imageTag = `<img src="${fileIdOrUrl}" alt="Part Photo" 
                                      onload="this.style.display='block'" 
-                                     onerror="this.outerHTML='<span class=\\'text-red-500 text-[10px] font-bold text-center\\'>ลิงก์ไม่ถูกต้อง</span>'">`;
+                                     onerror="this.outerHTML='<span class=\'text-red-500 text-[10px] font-bold text-center\'>ลิงก์ไม่ถูกต้อง</span>'">`;
                 }
             }
 
-            // ฟังก์ชันซ่อนค่า หากค่าเป็น 0, '0', null, undefined หรือว่างเปล่า ให้คืนค่าว่างไปเลย
             const clearZero = (val) => {
                 if (val === 0 || val === '0' || val === null || val === undefined || val === '') return '';
                 return val;
             };
 
+            const idCode = clearZero(item['ID Code']);
+            const hasIdCode = String(idCode).trim() !== '';
+
+            if (hasIdCode) {
+                return `
+                    <table class="tag-box bg-white">
+                        <colgroup>
+                            <col style="width:25%">
+                            <col style="width:35%">
+                            <col style="width:15%">
+                            <col style="width:25%">
+                        </colgroup>
+                        <tr>
+                            <td class="font-bold uppercase bg-gray-100">Customer</td>
+                            <td class="text-center font-bold text-lg uppercase" colspan="3">${clearZero(item['Customer'])}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold uppercase bg-gray-100">Model</td>
+                            <td class="text-center font-bold uppercase">${clearZero(item['Model'])}</td>
+                            <td class="font-bold text-center uppercase bg-gray-100">Date</td>
+                            <td class="text-center font-bold">${dateStr}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-xs uppercase bg-gray-100">Part Name</td>
+                            <td class="text-center font-bold text-sm uppercase" colspan="3">${clearZero(item['Part name'])}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-xs uppercase bg-gray-100">Part Number</td>
+                            <td class="text-center font-bold text-sm uppercase" colspan="3">${clearZero(item['Part no'])}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold uppercase bg-gray-100" rowspan="2">Quantity</td>
+                            <td class="text-center" rowspan="2"><span class="font-bold text-xl">${clearZero(item['Qty pcs'])}</span> Pcs.</td>
+                            <td class="font-bold text-xs uppercase bg-gray-100" colspan="2">ID Code.</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center align-middle p-0" colspan="2">
+                                <div class="tag-img-container">${imageTag}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold uppercase bg-gray-100">Operator</td>
+                            <td colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-[9px] text-center uppercase tracking-widest bg-gray-50" colspan="4">
+                                Thai Cubic Technology Co.,Ltd.
+                            </td>
+                        </tr>
+                    </table>
+                `;
+            }
+
             return `
                 <table class="tag-box bg-white">
+                    <colgroup>
+                        <col style="width:25%">
+                        <col style="width:35%">
+                        <col style="width:15%">
+                        <col style="width:25%">
+                    </colgroup>
                     <tr>
-                        <td class="font-bold w-[25%] uppercase bg-gray-100">Customer</td>
+                        <td class="font-bold uppercase bg-gray-100">Customer</td>
                         <td class="text-center font-bold text-lg uppercase" colspan="3">${clearZero(item['Customer'])}</td>
                     </tr>
                     <tr>
                         <td class="font-bold uppercase bg-gray-100">Model</td>
-                        <td class="text-center font-bold uppercase w-[35%]">${clearZero(item['Model'])}</td>
-                        <td class="font-bold text-center w-[15%] uppercase bg-gray-100">Date</td>
-                        <td class="text-center font-bold w-[25%]">${dateStr}</td>
+                        <td class="text-center font-bold uppercase">${clearZero(item['Model'])}</td>
+                        <td class="font-bold text-center uppercase bg-gray-100">Date</td>
+                        <td class="text-center font-bold">${dateStr}</td>
                     </tr>
                     <tr>
                         <td class="font-bold text-xs uppercase bg-gray-100">Part Name</td>
