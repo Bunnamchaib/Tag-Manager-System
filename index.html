@@ -153,7 +153,7 @@
     <script>
         // =========================================================
         // 🔴 ใส่ URL Google Apps Script ที่นี่
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdknCuAju4ppjrWvxGizYAH0vwicX9Ww4mrV8z_og9t8qTipmnfZOPeHeMR6E1iYDMYQ/exec"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxFw17n7qiGq8tnYBtBqqh0q6QbBxL-ud5lEx1RBzdPodv5w2gqY_kAcy5FYWHOGWujHQ/exec"; 
         // =========================================================
         
         let allData = [];
@@ -313,11 +313,60 @@
         // =========================================================
         function extractDriveImageId(url) {
             if (!url) return null;
-            const match = url.match(/[-\w]{25,}/);
-            if (match) {
-                return match[0];
+            const urlStr = String(url).trim();
+
+            const fileMatch = urlStr.match(/\/file\/d\/([a-zA-Z0-9_-]+)/i);
+            if (fileMatch && fileMatch[1]) return fileMatch[1];
+
+            const openMatch = urlStr.match(/[?&]id=([a-zA-Z0-9_-]+)/i);
+            if (openMatch && openMatch[1]) return openMatch[1];
+
+            const genericMatch = urlStr.match(/[-\w]{25,}/);
+            if (genericMatch) return genericMatch[0];
+
+            return urlStr;
+        }
+
+        function getGoogleDriveImageTag(rawImageLink) {
+            if (!rawImageLink) {
+                return '<span class="text-gray-300 text-xs font-bold">ไม่มีรูปภาพ</span>';
             }
-            return url; 
+
+            const cleanLink = String(rawImageLink).trim();
+
+            if (cleanLink.startsWith('data:image/')) {
+                return `<img src="${cleanLink}" alt="Part Photo">`;
+            }
+
+            const fileIdOrUrl = extractDriveImageId(cleanLink);
+            if (!fileIdOrUrl || fileIdOrUrl.length <= 5) {
+                return '<span class="text-red-500 text-[10px] font-bold text-center">ลิงก์รูปไม่ถูกต้อง</span>';
+            }
+
+            if (fileIdOrUrl.startsWith('http://') || fileIdOrUrl.startsWith('https://')) {
+                return `<img src="${fileIdOrUrl}" alt="Part Photo" referrerpolicy="no-referrer"
+                             onerror="this.outerHTML='<span class=\'text-red-500 text-[10px] font-bold text-center\'>ลิงก์ไม่ถูกต้อง</span>'">`;
+            }
+
+            const candidates = [
+                `https://drive.google.com/thumbnail?id=${fileIdOrUrl}&sz=w1000`,
+                `https://drive.google.com/uc?export=view&id=${fileIdOrUrl}`,
+                `https://drive.google.com/uc?export=download&id=${fileIdOrUrl}`,
+                `https://lh3.googleusercontent.com/d/${fileIdOrUrl}=w1000`
+            ];
+            const encodedCandidates = JSON.stringify(candidates).replace(/"/g, '&quot;');
+
+            return `<img src="${candidates[0]}" alt="Part Photo" referrerpolicy="no-referrer"
+                         onerror="(function(img){
+                            const urls = ${encodedCandidates};
+                            const nextIndex = Number(img.dataset.tryIndex || '0') + 1;
+                            if (nextIndex < urls.length) {
+                                img.dataset.tryIndex = String(nextIndex);
+                                img.src = urls[nextIndex];
+                            } else {
+                                img.outerHTML = '<span class=\'text-red-500 text-[10px] font-bold text-center\'>โหลดรูปไม่ได้<br>(ตรวจสิทธิ์แชร์ Google Drive)</span>';
+                            }
+                         })(this)">`;
         }
 
         function buildTagHTML(item, dateStr) {
@@ -331,23 +380,7 @@
                 }
             }
 
-            const fileIdOrUrl = extractDriveImageId(rawImageLink);
-            let imageTag = '<span class="text-gray-300 text-xs font-bold">ไม่มีรูปภาพ</span>';
-
-            if (fileIdOrUrl && fileIdOrUrl.length > 5) {
-                if (!fileIdOrUrl.includes('/') && fileIdOrUrl.length >= 25) {
-                    const url1 = `https://drive.google.com/uc?export=view&id=${fileIdOrUrl}`;
-                    const url2 = `https://lh3.googleusercontent.com/d/${fileIdOrUrl}`;
-
-                    imageTag = `<img src="${url1}" alt="Part Photo" 
-                                     onload="this.style.display='block'" 
-                                     onerror="if(!this.dataset.retried){ this.dataset.retried='true'; this.src='${url2}'; } else { this.outerHTML='<span class=\'text-red-500 text-[10px] font-bold text-center\'>โหลดรูปไม่ได้<br>(ลืมเปิดแชร์ลิงก์เป็นสาธารณะ?)</span>'; }">`;
-                } else {
-                    imageTag = `<img src="${fileIdOrUrl}" alt="Part Photo" 
-                                     onload="this.style.display='block'" 
-                                     onerror="this.outerHTML='<span class=\'text-red-500 text-[10px] font-bold text-center\'>ลิงก์ไม่ถูกต้อง</span>'">`;
-                }
-            }
+            const imageTag = getGoogleDriveImageTag(rawImageLink);
 
             const clearZero = (val) => {
                 if (val === 0 || val === '0' || val === null || val === undefined || val === '') return '';
@@ -390,16 +423,17 @@
                             <td class="font-bold text-xs uppercase bg-gray-100" colspan="2">ID Code.</td>
                         </tr>
                         <tr>
-                            <td class="text-center align-middle p-0" colspan="2">
+                            <td class="text-center font-bold text-sm uppercase" colspan="2">${idCode}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold uppercase bg-gray-100">Operator</td>
+                            <td></td>
+                            <td class="text-center align-middle p-0" colspan="2" rowspan="2">
                                 <div class="tag-img-container">${imageTag}</div>
                             </td>
                         </tr>
                         <tr>
-                            <td class="font-bold uppercase bg-gray-100">Operator</td>
-                            <td colspan="3"></td>
-                        </tr>
-                        <tr>
-                            <td class="font-bold text-[9px] text-center uppercase tracking-widest bg-gray-50" colspan="4">
+                            <td class="font-bold text-[9px] text-center uppercase tracking-widest bg-gray-50" colspan="2">
                                 Thai Cubic Technology Co.,Ltd.
                             </td>
                         </tr>
@@ -480,7 +514,7 @@
             if (!selectedItem) return;
             const dateStr = getFormattedDate();
             document.getElementById('single-preview-container').innerHTML = `
-                <div class="w-full shadow-md bg-white h-[200px]">
+                <div class="w-full shadow-md bg-white">
                     ${buildTagHTML(selectedItem, dateStr)}
                 </div>
             `;
