@@ -18,10 +18,49 @@
         }
         .tag-box td { border: 1px solid #000; padding: 4px 8px; font-size: 11px; vertical-align: middle; }
         .tag-box .font-bold { font-weight: 700; }
+        .tag-top-label { height: 28px; }
+        .tag-top-value { height: 28px; }
+        .tag-singleline {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: clip;
+            line-height: 1.05;
+        }
+        .part-no-value {
+            font-size: 10px !important;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: clip;
+            line-height: 1.05;
+        }
+        .tag-company-cell {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            font-size: 9px !important;
+            padding-top: 3px !important;
+            padding-bottom: 3px !important;
+        }
         .tag-img-container {
             width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; overflow: hidden;
         }
         .tag-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .tag-v2 .tag-right-panel {
+            padding: 0 !important;
+        }
+        .tag-v2 .tag-right-panel-inner {
+            width: 100%; height: 100%; display: flex; flex-direction: column;
+        }
+        .tag-v2 .tag-id-head {
+            border-bottom: 1px solid #000; padding: 4px 8px; font-size: 11px; font-weight: 700;
+            text-transform: uppercase; background: #f3f4f6; min-height: 30px; display: flex; align-items: center;
+        }
+        .tag-v2 .tag-id-value {
+            border-bottom: 1px solid #000; padding: 3px 8px; font-size: 11px; font-weight: 700;
+            text-align: center; min-height: 28px; display: flex; align-items: center; justify-content: center;
+            white-space: nowrap; overflow: hidden; text-overflow: clip;
+        }
+        .tag-v2 .tag-img-container { height: 42px; }
 
         /* =========================================
            ตั้งค่าสำหรับการพิมพ์ A4 (ลดขนาดและจัดกลาง)
@@ -49,7 +88,14 @@
             /* ลดขนาดฟอนต์และช่องว่างลงนิดนึงตอนพิมพ์ */
             .tag-box { border: 1.5px solid #000; }
             .tag-box td { font-size: 10px; padding: 3px 6px; }
+            .tag-top-label, .tag-top-value { height: 24px; }
+            .part-no-value { font-size: 8.5px !important; }
+            .tag-company-cell { font-size: 8.5px !important; padding-top: 2px !important; padding-bottom: 2px !important; }
             .tag-img-container { height: 50px; }
+            .tag-v2 td { padding: 2px 5px; }
+            .tag-v2 .tag-id-head { min-height: 24px; padding: 2px 6px; font-size: 9px; }
+            .tag-v2 .tag-id-value { min-height: 22px; padding: 2px 6px; font-size: 9px; }
+            .tag-v2 .tag-img-container { height: 32px; }
         }
     </style>
 </head>
@@ -392,48 +438,48 @@
 
             if (hasIdCode) {
                 return `
-                    <table class="tag-box bg-white">
+                    <table class="tag-box tag-v2 bg-white">
                         <colgroup>
-                            <col style="width:25%">
-                            <col style="width:35%">
-                            <col style="width:15%">
-                            <col style="width:25%">
+                            <col style="width:22%">
+                            <col style="width:38%">
+                            <col style="width:18%">
+                            <col style="width:22%">
                         </colgroup>
                         <tr>
-                            <td class="font-bold uppercase bg-gray-100">Customer</td>
-                            <td class="text-center font-bold text-lg uppercase" colspan="3">${clearZero(item['Customer'])}</td>
+                            <td class="font-bold uppercase bg-gray-100 tag-top-label">Customer</td>
+                            <td class="text-center font-bold text-lg uppercase tag-top-value" colspan="3">${clearZero(item['Customer'])}</td>
                         </tr>
                         <tr>
                             <td class="font-bold uppercase bg-gray-100">Model</td>
-                            <td class="text-center font-bold uppercase">${clearZero(item['Model'])}</td>
+                            <td class="text-center font-bold uppercase tag-singleline">${clearZero(item['Model'])}</td>
                             <td class="font-bold text-center uppercase bg-gray-100">Date</td>
-                            <td class="text-center font-bold">${dateStr}</td>
+                            <td class="text-center font-bold tag-singleline">${dateStr}</td>
                         </tr>
                         <tr>
                             <td class="font-bold text-xs uppercase bg-gray-100">Part Name</td>
-                            <td class="text-center font-bold text-sm uppercase" colspan="3">${clearZero(item['Part name'])}</td>
+                            <td class="text-center font-bold text-sm uppercase tag-singleline" colspan="3">${clearZero(item['Part name'])}</td>
                         </tr>
                         <tr>
                             <td class="font-bold text-xs uppercase bg-gray-100">Part Number</td>
-                            <td class="text-center font-bold text-sm uppercase" colspan="3">${clearZero(item['Part no'])}</td>
+                            <td class="text-center font-bold uppercase part-no-value" colspan="3">${clearZero(item['Part no'])}</td>
                         </tr>
                         <tr>
-                            <td class="font-bold uppercase bg-gray-100" rowspan="2">Quantity</td>
-                            <td class="text-center" rowspan="2"><span class="font-bold text-xl">${clearZero(item['Qty pcs'])}</span> Pcs.</td>
-                            <td class="font-bold text-xs uppercase bg-gray-100" colspan="2">ID Code.</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center font-bold text-sm uppercase" colspan="2">${idCode}</td>
+                            <td class="font-bold uppercase bg-gray-100">Quantity</td>
+                            <td class="text-center"><span class="font-bold text-xl">${clearZero(item['Qty pcs'])}</span> Pcs.</td>
+                            <td class="tag-right-panel" colspan="2" rowspan="2">
+                                <div class="tag-right-panel-inner">
+                                    <div class="tag-id-head">ID Code.</div>
+                                    <div class="tag-id-value">${idCode}</div>
+                                    <div class="tag-img-container">${imageTag}</div>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td class="font-bold uppercase bg-gray-100">Operator</td>
                             <td></td>
-                            <td class="text-center align-middle p-0" colspan="2" rowspan="2">
-                                <div class="tag-img-container">${imageTag}</div>
-                            </td>
                         </tr>
                         <tr>
-                            <td class="font-bold text-[9px] text-center uppercase tracking-widest bg-gray-50" colspan="2">
+                            <td class="font-bold bg-gray-50 tag-company-cell" colspan="4">
                                 Thai Cubic Technology Co.,Ltd.
                             </td>
                         </tr>
@@ -442,30 +488,30 @@
             }
 
             return `
-                <table class="tag-box bg-white">
+                <table class="tag-box tag-v1 bg-white">
                     <colgroup>
-                        <col style="width:25%">
-                        <col style="width:35%">
-                        <col style="width:15%">
-                        <col style="width:25%">
+                        <col style="width:22%">
+                        <col style="width:38%">
+                        <col style="width:18%">
+                        <col style="width:22%">
                     </colgroup>
                     <tr>
-                        <td class="font-bold uppercase bg-gray-100">Customer</td>
-                        <td class="text-center font-bold text-lg uppercase" colspan="3">${clearZero(item['Customer'])}</td>
+                        <td class="font-bold uppercase bg-gray-100 tag-top-label">Customer</td>
+                        <td class="text-center font-bold text-lg uppercase tag-top-value" colspan="3">${clearZero(item['Customer'])}</td>
                     </tr>
                     <tr>
                         <td class="font-bold uppercase bg-gray-100">Model</td>
-                        <td class="text-center font-bold uppercase">${clearZero(item['Model'])}</td>
+                        <td class="text-center font-bold uppercase tag-singleline">${clearZero(item['Model'])}</td>
                         <td class="font-bold text-center uppercase bg-gray-100">Date</td>
-                        <td class="text-center font-bold">${dateStr}</td>
+                        <td class="text-center font-bold tag-singleline">${dateStr}</td>
                     </tr>
                     <tr>
                         <td class="font-bold text-xs uppercase bg-gray-100">Part Name</td>
-                        <td class="text-center font-bold text-sm uppercase" colspan="3">${clearZero(item['Part name'])}</td>
+                        <td class="text-center font-bold text-sm uppercase tag-singleline" colspan="3">${clearZero(item['Part name'])}</td>
                     </tr>
                     <tr>
                         <td class="font-bold text-xs uppercase bg-gray-100">Part Number</td>
-                        <td class="text-center font-bold text-sm uppercase" colspan="3">${clearZero(item['Part no'])}</td>
+                        <td class="text-center font-bold uppercase part-no-value" colspan="3">${clearZero(item['Part no'])}</td>
                     </tr>
                     <tr>
                         <td class="font-bold uppercase bg-gray-100">Quantity</td>
@@ -479,7 +525,7 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td class="font-bold text-[9px] text-center uppercase tracking-widest bg-gray-50" colspan="4">
+                        <td class="font-bold bg-gray-50 tag-company-cell" colspan="4">
                             Thai Cubic Technology Co.,Ltd.
                         </td>
                     </tr>
