@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
@@ -11,7 +11,7 @@
         
         body { font-family: 'Sarabun', sans-serif; background-color: #f3f4f6; }
 
-        /* การจัดรูปแบบตาราง Tag */
+        /* เธเธฒเธฃเธเธฑเธ”เธฃเธนเธเนเธเธเธ•เธฒเธฃเธฒเธ Tag */
         .tag-box {
             width: 100%; height: 100%; border: 2px solid #000;
             border-collapse: collapse; background: #fff; table-layout: fixed;
@@ -63,11 +63,11 @@
         .tag-v2 .tag-img-container { height: 42px; }
 
         /* =========================================
-           ตั้งค่าสำหรับการพิมพ์ A4 (ลดขนาดและจัดกลาง)
+           เธ•เธฑเนเธเธเนเธฒเธชเธณเธซเธฃเธฑเธเธเธฒเธฃเธเธดเธกเธเน A4 (เธฅเธ”เธเธเธฒเธ”เนเธฅเธฐเธเธฑเธ”เธเธฅเธฒเธ)
            ========================================= */
         @page {
             size: A4 portrait;
-            margin: 0; /* ให้เบราว์เซอร์เลิกยุ่งกับขอบกระดาษ */
+            margin: 0; /* เนเธซเนเน€เธเธฃเธฒเธงเนเน€เธเธญเธฃเนเน€เธฅเธดเธเธขเธธเนเธเธเธฑเธเธเธญเธเธเธฃเธฐเธ”เธฒเธฉ */
         }
         @media print {
             body { background: #fff; }
@@ -77,15 +77,15 @@
                 display: grid !important;
                 grid-template-columns: 1fr 1fr;
                 grid-template-rows: repeat(5, 1fr);
-                /* ปรับขนาดให้เล็กกว่า A4 จริงเล็กน้อย เพื่อไม่ให้ล้นขอบเครื่องพิมพ์ */
+                /* เธเธฃเธฑเธเธเธเธฒเธ”เนเธซเนเน€เธฅเนเธเธเธงเนเธฒ A4 เธเธฃเธดเธเน€เธฅเนเธเธเนเธญเธข เน€เธเธทเนเธญเนเธกเนเนเธซเนเธฅเนเธเธเธญเธเน€เธเธฃเธทเนเธญเธเธเธดเธกเธเน */
                 width: 195mm; 
                 height: 282mm;
-                margin: 7.5mm auto; /* จัดให้อยู่กึ่งกลางกระดาษ */
-                gap: 4mm; /* ลดระยะห่างลง */
+                margin: 7.5mm auto; /* เธเธฑเธ”เนเธซเนเธญเธขเธนเนเธเธถเนเธเธเธฅเธฒเธเธเธฃเธฐเธ”เธฒเธฉ */
+                gap: 4mm; /* เธฅเธ”เธฃเธฐเธขเธฐเธซเนเธฒเธเธฅเธ */
                 box-sizing: border-box;
                 page-break-after: always;
             }
-            /* ลดขนาดฟอนต์และช่องว่างลงนิดนึงตอนพิมพ์ */
+            /* เธฅเธ”เธเธเธฒเธ”เธเธญเธเธ•เนเนเธฅเธฐเธเนเธญเธเธงเนเธฒเธเธฅเธเธเธดเธ”เธเธถเธเธ•เธญเธเธเธดเธกเธเน */
             .tag-box { border: 1.5px solid #000; }
             .tag-box td { font-size: 10px; padding: 3px 6px; }
             .tag-top-label, .tag-top-value { height: 24px; }
@@ -117,23 +117,23 @@
                         </div>
                         <input type="text" id="searchInput" onkeyup="handleSearch()" 
                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-12 p-2.5 shadow-sm" 
-                               placeholder="ค้นหาชื่อ Model / Part name / Part no.">
+                               placeholder="เธเนเธเธซเธฒเธเธทเนเธญ Model / Part name / Part no.">
                     </div>
                     
                     <div class="flex items-center gap-2 w-full md:w-1/3 justify-end">
-                        <label class="text-sm text-gray-600 whitespace-nowrap">แสดง:</label>
+                        <label class="text-sm text-gray-600 whitespace-nowrap">เนเธชเธ”เธ:</label>
                         <select id="itemsPerPage" onchange="changeItemsPerPage()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 shadow-sm">
-                            <option value="15" selected>15 รายการ</option>
-                            <option value="30">30 รายการ</option>
-                            <option value="50">50 รายการ</option>
-                            <option value="all">ทั้งหมด</option>
+                            <option value="15" selected>15 เธฃเธฒเธขเธเธฒเธฃ</option>
+                            <option value="30">30 เธฃเธฒเธขเธเธฒเธฃ</option>
+                            <option value="50">50 เธฃเธฒเธขเธเธฒเธฃ</option>
+                            <option value="all">เธ—เธฑเนเธเธซเธกเธ”</option>
                         </select>
                     </div>
                 </div>
 
                 <div id="loading" class="text-center py-10">
                     <i class="fa-solid fa-spinner fa-spin text-4xl text-blue-500 mb-3"></i>
-                    <p class="text-gray-500 text-lg">กำลังโหลดฐานข้อมูล...</p>
+                    <p class="text-gray-500 text-lg">เธเธณเธฅเธฑเธเนเธซเธฅเธ”เธเธฒเธเธเนเธญเธกเธนเธฅ...</p>
                 </div>
 
                 <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm mb-4">
@@ -155,10 +155,10 @@
                 </div>
 
                 <div id="pagination" class="flex justify-between items-center text-sm" style="display: none;">
-                    <div class="text-gray-600" id="pageInfo">แสดง 1-15 จากทั้งหมด 0 รายการ</div>
+                    <div class="text-gray-600" id="pageInfo">เนเธชเธ”เธ 1-15 เธเธฒเธเธ—เธฑเนเธเธซเธกเธ” 0 เธฃเธฒเธขเธเธฒเธฃ</div>
                     <div class="flex gap-2">
-                        <button onclick="prevPage()" id="btnPrev" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50"><i class="fa-solid fa-chevron-left"></i> ก่อนหน้า</button>
-                        <button onclick="nextPage()" id="btnNext" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50">ถัดไป <i class="fa-solid fa-chevron-right"></i></button>
+                        <button onclick="prevPage()" id="btnPrev" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50"><i class="fa-solid fa-chevron-left"></i> เธเนเธญเธเธซเธเนเธฒ</button>
+                        <button onclick="nextPage()" id="btnNext" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50">เธ–เธฑเธ”เนเธ <i class="fa-solid fa-chevron-right"></i></button>
                     </div>
                 </div>
 
@@ -171,23 +171,23 @@
                 
                 <div class="mb-4 bg-blue-50 p-4 rounded-lg border border-blue-100">
                     <div class="flex items-center justify-between mb-1">
-                        <label class="block text-sm font-semibold text-gray-700">ตั้งค่าวันที่พิมพ์</label>
-                        <!-- เพิ่ม Checkbox ไม่แสดงวันที่ ตรงนี้ -->
+                        <label class="block text-sm font-semibold text-gray-700">เธ•เธฑเนเธเธเนเธฒเธงเธฑเธเธ—เธตเนเธเธดเธกเธเน</label>
+                        <!-- เน€เธเธดเนเธก Checkbox เนเธกเนเนเธชเธ”เธเธงเธฑเธเธ—เธตเน เธ•เธฃเธเธเธตเน -->
                         <div class="flex items-center gap-2">
                             <input type="checkbox" id="noDateCheck" class="w-4 h-4 cursor-pointer text-blue-600" onchange="updatePreviewUI()">
-                            <label for="noDateCheck" class="text-sm cursor-pointer text-gray-700 font-medium">ไม่แสดงวันที่</label>
+                            <label for="noDateCheck" class="text-sm cursor-pointer text-gray-700 font-medium">เนเธกเนเนเธชเธ”เธเธงเธฑเธเธ—เธตเน</label>
                         </div>
                     </div>
                     <input type="date" id="printDate" class="w-full border-gray-300 rounded-md shadow-sm p-2" onchange="updatePreviewUI()">
                 </div>
 
                 <div id="single-preview-container" class="mb-6 p-4 bg-gray-100 rounded-lg flex justify-center items-center min-h-[250px] shadow-inner">
-                    <p class="text-gray-400 text-center">คลิกปุ่ม Preview<br>เพื่อโหลดภาพและดูตัวอย่าง</p>
+                    <p class="text-gray-400 text-center">เธเธฅเธดเธเธเธธเนเธก Preview<br>เน€เธเธทเนเธญเนเธซเธฅเธ”เธ เธฒเธเนเธฅเธฐเธ”เธนเธ•เธฑเธงเธญเธขเนเธฒเธ</p>
                 </div>
 
                 <button id="printBtn" onclick="triggerPrint()" disabled 
                         class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-blue-700 disabled:bg-gray-300 transition duration-200 flex justify-center items-center gap-2 text-lg">
-                    <i class="fa-solid fa-print"></i> พิมพ์ A4 (10 แผ่น)
+                    <i class="fa-solid fa-print"></i> เธเธดเธกเธเน A4 (10 เนเธเนเธ)
                 </button>
             </div>
             
@@ -198,7 +198,7 @@
 
     <script>
         // =========================================================
-        // 🔴 ใส่ URL Google Apps Script ที่นี่
+        // ๐”ด เนเธชเน URL Google Apps Script เธ—เธตเนเธเธตเน
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxFw17n7qiGq8tnYBtBqqh0q6QbBxL-ud5lEx1RBzdPodv5w2gqY_kAcy5FYWHOGWujHQ/exec"; 
         // =========================================================
         
@@ -206,17 +206,17 @@
         let filteredData = [];
         let selectedItem = null;
 
-        // การตั้งค่า Pagination
+        // เธเธฒเธฃเธ•เธฑเนเธเธเนเธฒ Pagination
         let currentPage = 1;
         let itemsPerPage = 15;
 
         // =========================================================
-        // อัปเดต: ระบบ Caching โหลดไว 0.1 วิ และอัปเดตเบื้องหลัง
+        // เธญเธฑเธเน€เธ”เธ•: เธฃเธฐเธเธ Caching เนเธซเธฅเธ”เนเธง 0.1 เธงเธด เนเธฅเธฐเธญเธฑเธเน€เธ”เธ•เน€เธเธทเนเธญเธเธซเธฅเธฑเธ
         // =========================================================
         window.onload = async () => {
             document.getElementById('printDate').valueAsDate = new Date();
             
-            // 1. ดึงข้อมูลจาก Cache ในเครื่องก่อน
+            // 1. เธ”เธถเธเธเนเธญเธกเธนเธฅเธเธฒเธ Cache เนเธเน€เธเธฃเธทเนเธญเธเธเนเธญเธ
             const cachedData = localStorage.getItem('tagManagerDB');
             if (cachedData) {
                 allData = JSON.parse(cachedData);
@@ -228,13 +228,13 @@
                 renderTable(); 
             }
 
-            // 2. แอบไปวิ่งดึงข้อมูลใหม่จาก Google Sheets เบื้องหลัง
+            // 2. เนเธญเธเนเธเธงเธดเนเธเธ”เธถเธเธเนเธญเธกเธนเธฅเนเธซเธกเนเธเธฒเธ Google Sheets เน€เธเธทเนเธญเธเธซเธฅเธฑเธ
             try {
                 const response = await fetch(SCRIPT_URL);
                 if (!response.ok) throw new Error("Network error");
                 const freshData = await response.json();
                 
-                // 3. เทียบข้อมูล ถ้ามีอัปเดตให้เซฟและแสดงผลใหม่เนียนๆ
+                // 3. เน€เธ—เธตเธขเธเธเนเธญเธกเธนเธฅ เธ–เนเธฒเธกเธตเธญเธฑเธเน€เธ”เธ•เนเธซเนเน€เธเธเนเธฅเธฐเนเธชเธ”เธเธเธฅเนเธซเธกเนเน€เธเธตเธขเธเน
                 if (JSON.stringify(freshData) !== JSON.stringify(allData)) {
                     allData = freshData;
                     
@@ -247,10 +247,10 @@
                     }
                     
                     localStorage.setItem('tagManagerDB', JSON.stringify(freshData));
-                    console.log("อัปเดตข้อมูลล่าสุดจากฐานข้อมูลเรียบร้อยแล้ว");
+                    console.log("เธญเธฑเธเน€เธ”เธ•เธเนเธญเธกเธนเธฅเธฅเนเธฒเธชเธธเธ”เธเธฒเธเธเธฒเธเธเนเธญเธกเธนเธฅเน€เธฃเธตเธขเธเธฃเนเธญเธขเนเธฅเนเธง");
                 }
                 
-                // กรณีเปิดเว็บครั้งแรกสุด ยังไม่มี Cache
+                // เธเธฃเธ“เธตเน€เธเธดเธ”เน€เธงเนเธเธเธฃเธฑเนเธเนเธฃเธเธชเธธเธ” เธขเธฑเธเนเธกเนเธกเธต Cache
                 if (!cachedData) {
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('dataTable').style.display = 'table';
@@ -260,14 +260,14 @@
 
             } catch (error) {
                 if (!cachedData) {
-                    document.getElementById('loading').innerHTML = `<div class="text-red-500 font-bold">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>`;
+                    document.getElementById('loading').innerHTML = `<div class="text-red-500 font-bold">เน€เธเธดเธ”เธเนเธญเธเธดเธ”เธเธฅเธฒเธ”เนเธเธเธฒเธฃเนเธซเธฅเธ”เธเนเธญเธกเธนเธฅ</div>`;
                 }
-                console.log("ทำงานโหมด Offline หรือเชื่อมต่อไม่สำเร็จ");
+                console.log("เธ—เธณเธเธฒเธเนเธซเธกเธ” Offline เธซเธฃเธทเธญเน€เธเธทเนเธญเธกเธ•เนเธญเนเธกเนเธชเธณเน€เธฃเนเธ");
             }
         };
 
         // =========================================================
-        // ระบบค้นหา และ แบ่งหน้า (Pagination)
+        // เธฃเธฐเธเธเธเนเธเธซเธฒ เนเธฅเธฐ เนเธเนเธเธซเธเนเธฒ (Pagination)
         // =========================================================
         function handleSearch() {
             const query = document.getElementById('searchInput').value.toLowerCase();
@@ -276,7 +276,7 @@
                        (item['Part name'] && item['Part name'].toString().toLowerCase().includes(query)) ||
                        (item['Part no'] && item['Part no'].toString().toLowerCase().includes(query));
             });
-            currentPage = 1; // กลับไปหน้าแรกเสมอเมื่อค้นหา
+            currentPage = 1; // เธเธฅเธฑเธเนเธเธซเธเนเธฒเนเธฃเธเน€เธชเธกเธญเน€เธกเธทเนเธญเธเนเธเธซเธฒ
             renderTable();
         }
 
@@ -301,12 +301,12 @@
             tbody.innerHTML = '';
             
             if(filteredData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-gray-500">ไม่พบข้อมูล</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-gray-500">เนเธกเนเธเธเธเนเธญเธกเธนเธฅ</td></tr>`;
                 updatePaginationUI(0, 0, 0);
                 return;
             }
 
-            // คำนวณช่วงข้อมูลที่จะแสดง
+            // เธเธณเธเธงเธ“เธเนเธงเธเธเนเธญเธกเธนเธฅเธ—เธตเนเธเธฐเนเธชเธ”เธ
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
             const currentData = filteredData.slice(startIndex, endIndex);
@@ -327,16 +327,16 @@
                     <td class="px-3 py-3 text-center font-bold text-blue-600">${item['Qty pcs'] || '-'}</td>
                     <td class="px-3 py-3 text-center">
                         <div class="flex flex-wrap gap-1 justify-center">
-                            <button onclick="selectForPreview('${itemJson}')" class="text-[11px] bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200 font-semibold" title="ดูตัวอย่าง">
+                            <button onclick="selectForPreview('${itemJson}')" class="text-[11px] bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200 font-semibold" title="เธ”เธนเธ•เธฑเธงเธญเธขเนเธฒเธ">
                                 <i class="fa-solid fa-eye"></i> Preview
                             </button>
-                            <button onclick="requestEdit('${item['Part no']}')" class="text-[11px] bg-yellow-100 text-yellow-700 px-2 py-1 rounded hover:bg-yellow-200 font-semibold" title="ขอแก้ไข">
-                                <i class="fa-solid fa-pen-to-square"></i> แก้ไข
+                            <button onclick="requestEdit('${item['Part no']}')" class="text-[11px] bg-yellow-100 text-yellow-700 px-2 py-1 rounded hover:bg-yellow-200 font-semibold" title="เธเธญเนเธเนเนเธ">
+                                <i class="fa-solid fa-pen-to-square"></i> เนเธเนเนเธ
                             </button>
-                            <button onclick="downloadTag('${itemJson}')" class="text-[11px] bg-green-100 text-green-700 px-2 py-1 rounded hover:bg-green-200 font-semibold" title="ดาวโหลด">
+                            <button onclick="downloadTag('${itemJson}')" class="text-[11px] bg-green-100 text-green-700 px-2 py-1 rounded hover:bg-green-200 font-semibold" title="เธ”เธฒเธงเนเธซเธฅเธ”">
                                 <i class="fa-solid fa-download"></i>
                             </button>
-                            <button onclick="printDirectly('${itemJson}')" class="text-[11px] bg-gray-800 text-white px-2 py-1 rounded hover:bg-gray-900 font-semibold" title="พิมพ์ด่วน">
+                            <button onclick="printDirectly('${itemJson}')" class="text-[11px] bg-gray-800 text-white px-2 py-1 rounded hover:bg-gray-900 font-semibold" title="เธเธดเธกเธเนเธ”เนเธงเธ">
                                 <i class="fa-solid fa-print"></i>
                             </button>
                         </div>
@@ -349,15 +349,15 @@
         }
 
         function updatePaginationUI(start, end, total) {
-            document.getElementById('pageInfo').innerText = `แสดง ${start}-${end} จากทั้งหมด ${total} รายการ`;
+            document.getElementById('pageInfo').innerText = `เนเธชเธ”เธ ${start}-${end} เธเธฒเธเธ—เธฑเนเธเธซเธกเธ” ${total} เธฃเธฒเธขเธเธฒเธฃ`;
             document.getElementById('btnPrev').disabled = currentPage === 1;
             document.getElementById('btnNext').disabled = end >= total;
         }
 
         // =========================================================
-        // อัปเดตระบบดึงรูปจาก Google Drive (แก้ปัญหาภาพไม่แสดง)
+        // เธญเธฑเธเน€เธ”เธ•เธฃเธฐเธเธเธ”เธถเธเธฃเธนเธเธเธฒเธ Google Drive (เนเธเนเธเธฑเธเธซเธฒเธ เธฒเธเนเธกเนเนเธชเธ”เธ)
         // =========================================================
-        function extractDriveImageId(url) {
+                function extractDriveImageId(url) {
             if (!url) return null;
             const urlStr = String(url).trim();
 
@@ -373,27 +373,53 @@
             return urlStr;
         }
 
+        function normalizeImageSource(rawImageValue) {
+            if (!rawImageValue) return null;
+
+            const cleanValue = String(rawImageValue).trim();
+            if (!cleanValue) return null;
+
+            if (cleanValue.startsWith('data:image/')) {
+                return { type: 'data-url', src: cleanValue };
+            }
+
+            // รองรับ base64 ดิบที่ไม่ได้ใส่ data URL prefix จากต้นทาง
+            if (/^[A-Za-z0-9+/=\r\n]+$/.test(cleanValue) && cleanValue.length > 100) {
+                return { type: 'data-url', src: `data:image/png;base64,${cleanValue.replace(/\s+/g, '')}` };
+            }
+
+            if (cleanValue.startsWith('http://') || cleanValue.startsWith('https://')) {
+                return { type: 'url', src: cleanValue };
+            }
+
+            const maybeDriveId = extractDriveImageId(cleanValue);
+            if (maybeDriveId && maybeDriveId.length > 5) {
+                return { type: 'drive-id', src: maybeDriveId };
+            }
+
+            return null;
+        }
+
         function getGoogleDriveImageTag(rawImageLink) {
             if (!rawImageLink) {
-                return '<span class="text-gray-300 text-xs font-bold">ไม่มีรูปภาพ</span>';
+                return '<span class="text-gray-300 text-xs font-bold">เนเธกเนเธกเธตเธฃเธนเธเธ เธฒเธ</span>';
             }
 
-            const cleanLink = String(rawImageLink).trim();
-
-            if (cleanLink.startsWith('data:image/')) {
-                return `<img src="${cleanLink}" alt="Part Photo">`;
+            const normalizedSource = normalizeImageSource(rawImageLink);
+            if (!normalizedSource) {
+                return '<span class="text-red-500 text-[10px] font-bold text-center">เธฅเธดเธเธเนเธฃเธนเธเนเธกเนเธ–เธนเธเธ•เนเธญเธ</span>';
             }
 
-            const fileIdOrUrl = extractDriveImageId(cleanLink);
-            if (!fileIdOrUrl || fileIdOrUrl.length <= 5) {
-                return '<span class="text-red-500 text-[10px] font-bold text-center">ลิงก์รูปไม่ถูกต้อง</span>';
+            if (normalizedSource.type === 'data-url') {
+                return `<img src="${normalizedSource.src}" alt="Part Photo">`;
             }
 
-            if (fileIdOrUrl.startsWith('http://') || fileIdOrUrl.startsWith('https://')) {
-                return `<img src="${fileIdOrUrl}" alt="Part Photo" referrerpolicy="no-referrer"
-                             onerror="this.outerHTML='<span class=\'text-red-500 text-[10px] font-bold text-center\'>ลิงก์ไม่ถูกต้อง</span>'">`;
+            if (normalizedSource.type === 'url') {
+                return `<img src="${normalizedSource.src}" alt="Part Photo" referrerpolicy="no-referrer"
+                             onerror="this.outerHTML='<span class=\'text-red-500 text-[10px] font-bold text-center\'>เธฅเธดเธเธเนเนเธกเนเธ–เธนเธเธ•เนเธญเธ</span>'">`;
             }
 
+            const fileIdOrUrl = normalizedSource.src;
             const candidates = [
                 `https://drive.google.com/thumbnail?id=${fileIdOrUrl}&sz=w1000`,
                 `https://drive.google.com/uc?export=view&id=${fileIdOrUrl}`,
@@ -410,11 +436,10 @@
                                 img.dataset.tryIndex = String(nextIndex);
                                 img.src = urls[nextIndex];
                             } else {
-                                img.outerHTML = '<span class=\'text-red-500 text-[10px] font-bold text-center\'>โหลดรูปไม่ได้<br>(ตรวจสิทธิ์แชร์ Google Drive)</span>';
+                                img.outerHTML = '<span class=\'text-red-500 text-[10px] font-bold text-center\'>เนเธซเธฅเธ”เธฃเธนเธเนเธกเนเนเธ”เน<br>(เธ•เธฃเธงเธเธชเธดเธ—เธเธดเนเนเธเธฃเน Google Drive)</span>';
                             }
                          })(this)">`;
         }
-
         function buildTagHTML(item, dateStr) {
             let rawImageLink = item['Photo base64'] || item['Image URL'] || item['Photo'];
             if (!rawImageLink) {
@@ -534,7 +559,7 @@
         }
 
         // =========================================================
-        // การทำงานของปุ่มต่างๆ
+        // เธเธฒเธฃเธ—เธณเธเธฒเธเธเธญเธเธเธธเนเธกเธ•เนเธฒเธเน
         // =========================================================
         
         function getFormattedDate() {
@@ -572,7 +597,7 @@
 
         function downloadTag(encodedItem) {
             selectForPreview(encodedItem);
-            alert("เคล็ดลับ: ในหน้าจอถัดไป ให้เลือกเครื่องพิมพ์เป็น 'Save as PDF' (บันทึกเป็น PDF)");
+            alert("เน€เธเธฅเนเธ”เธฅเธฑเธ: เนเธเธซเธเนเธฒเธเธญเธ–เธฑเธ”เนเธ เนเธซเนเน€เธฅเธทเธญเธเน€เธเธฃเธทเนเธญเธเธเธดเธกเธเนเน€เธเนเธ 'Save as PDF' (เธเธฑเธเธ—เธถเธเน€เธเนเธ PDF)");
             triggerPrint();
         }
 
@@ -602,3 +627,4 @@
     </script>
 </body>
 </html>
+
