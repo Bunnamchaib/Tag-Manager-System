@@ -458,6 +458,12 @@
                 return val;
             };
 
+            const partNameValue = clearZero(item['Part name']);
+            const partNoValue = clearZero(item['Part no']);
+            const getShrinkStyle = (val) => String(val || '').length > 43 ? ' style="font-size:85% !important;"' : '';
+            const partNameShrinkStyle = getShrinkStyle(partNameValue);
+            const partNoShrinkStyle = getShrinkStyle(partNoValue);
+
             const idCode = clearZero(item['ID Code']);
             const hasIdCode = String(idCode).trim() !== '';
 
@@ -482,11 +488,11 @@
                         </tr>
                         <tr>
                             <td class="font-bold text-xs uppercase bg-gray-100">Part Name</td>
-                            <td class="text-center font-bold text-sm uppercase tag-singleline" colspan="3">${clearZero(item['Part name'])}</td>
+                            <td class="text-center font-bold text-sm uppercase tag-singleline"${partNameShrinkStyle} colspan="3">${partNameValue}</td>
                         </tr>
                         <tr>
                             <td class="font-bold text-xs uppercase bg-gray-100">Part Number</td>
-                            <td class="text-center font-bold uppercase part-no-value" colspan="3">${clearZero(item['Part no'])}</td>
+                            <td class="text-center font-bold uppercase part-no-value"${partNoShrinkStyle} colspan="3">${partNoValue}</td>
                         </tr>
                         <tr>
                             <td class="font-bold uppercase bg-gray-100">Quantity</td>
@@ -532,11 +538,11 @@
                     </tr>
                     <tr>
                         <td class="font-bold text-xs uppercase bg-gray-100">Part Name</td>
-                        <td class="text-center font-bold text-sm uppercase tag-singleline" colspan="3">${clearZero(item['Part name'])}</td>
+                        <td class="text-center font-bold text-sm uppercase tag-singleline"${partNameShrinkStyle} colspan="3">${partNameValue}</td>
                     </tr>
                     <tr>
                         <td class="font-bold text-xs uppercase bg-gray-100">Part Number</td>
-                        <td class="text-center font-bold uppercase part-no-value" colspan="3">${clearZero(item['Part no'])}</td>
+                        <td class="text-center font-bold uppercase part-no-value"${partNoShrinkStyle} colspan="3">${partNoValue}</td>
                     </tr>
                     <tr>
                         <td class="font-bold uppercase bg-gray-100">Quantity</td>
