@@ -460,8 +460,8 @@
 
             const partNameValue = clearZero(item['Part name']);
             const partNoValue = clearZero(item['Part no']);
-            const getPartNameShrinkStyle = (val) => String(val || '').length > 43 ? ' style="font-size:11px !important;"' : '';
-            const getPartNoShrinkStyle = (val) => String(val || '').length > 43 ? ' style="font-size:8px !important;"' : '';
+            const getPartNameShrinkStyle = (val) => String(val || '').length > 43 ? ' style="font-size:8px !important;"' : '';
+            const getPartNoShrinkStyle = (val) => String(val || '').length > 43 ? ' style="font-size:6px !important;"' : '';
             const partNameShrinkStyle = getPartNameShrinkStyle(partNameValue);
             const partNoShrinkStyle = getPartNoShrinkStyle(partNoValue);
 
